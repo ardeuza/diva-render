@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       svg_url:
-        description: 'Public URL of SVG to render'
+        description: 'Presigned URL of the SVG to render (R2 S3 endpoint, valid 1h)'
         required: true
         type: string
-      png_path:
+      png_key:
         description: 'R2 key for output PNG (e.g. worldcups/v4.png)'
         required: true
         type: string
@@ -21,6 +21,11 @@ on:
         required: false
         type: string
         default: '768'
+      scale:
+        description: 'deviceScaleFactor (1=base, 2=2x, 3=3x, 4=4x). Final size = width*scale x height*scale'
+        required: false
+        type: string
+        default: '1'
 
 jobs:
   render:
@@ -50,6 +55,7 @@ jobs:
           SVG_URL: ${{ inputs.svg_url }}
           WIDTH: ${{ inputs.width }}
           HEIGHT: ${{ inputs.height }}
+          SCALE: ${{ inputs.scale }}
         run: node render.js
 
       - name: Upload PNG to R2
@@ -58,5 +64,8 @@ jobs:
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_BUCKET: diva-cards
-          R2_KEY: ${{ inputs.png_path }}
+          R2_KEY: ${{ inputs.png_key }}
         run: node upload-r2.js
+
+      - name: Verify
+        run: ls -lah output.png
