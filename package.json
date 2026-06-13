@@ -1,0 +1,15 @@
+{
+  "name": "diva-render",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SVG-to-PNG render service for diva. (Playwright Chromium + R2)",
+  "main": "render.js",
+  "scripts": {
+    "render": "node render.js",
+    "upload": "node upload-r2.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.658.0",
+    "playwright": "^1.47.0"
+  }
+}
