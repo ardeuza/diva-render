@@ -54,7 +54,7 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install chromium
 
       - name: Render SVG to PNG
         env:
